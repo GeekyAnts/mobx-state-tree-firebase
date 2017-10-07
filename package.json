@@ -1,0 +1,24 @@
+{
+  "name": "mobx-state-tree-firebase",
+  "version": "1.0.0",
+  "description": "Firebase Integration for mobx-state-tree",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeekyAnts/mobx-state-tree-firebase.git"
+  },
+  "keywords": [
+    "Firebase",
+    "mobx-state-tree",
+    "mobx"
+  ],
+  "author": "sanketsahu@gmail.com",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GeekyAnts/mobx-state-tree-firebase/issues"
+  },
+  "homepage": "https://github.com/GeekyAnts/mobx-state-tree-firebase#readme"
+}
