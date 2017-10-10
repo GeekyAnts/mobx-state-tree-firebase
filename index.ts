@@ -1,13 +1,12 @@
-import "./FirebaseConnect";
-import * as firebase from "firebase";
-import { types, getSnapshot, getType } from "mobx-state-tree";
+import * as firebase from 'firebase';
+import { types, getSnapshot, getType } from 'mobx-state-tree';
 
 const database = firebase.database();
 
-const FirebaseBaseModel = types
-  .model("FirebaseBaseModel", {
-    _id: types.optional(types.string, ""),
-    _path: types.optional(types.string, "")
+export const FirebaseModel = types
+  .model('FirebaseModel', {
+    _id: types.optional(types.string, ''),
+    _path: types.optional(types.string, '')
   })
   .actions(self => {
     const _getSnapshot = function() {
@@ -15,10 +14,9 @@ const FirebaseBaseModel = types
       let snapshot: object = {};
       for (var i in _snapshot) {
         // Exclude the private properties
-        if (i.substr(0, 1) === "_") {
+        if (i.substr(0, 1) === '_') {
           continue;
         }
-
         snapshot[i] = _snapshot[i];
       }
       return snapshot;
@@ -28,14 +26,14 @@ const FirebaseBaseModel = types
       if (!self._path) {
         throw new Error(
           getType(self).name +
-            " doesn't have _path prop defined." +
-            " Any model composed or extended from FirebaseBaseModel must define _path prop."
+            ` doesn't have _path prop defined.` +
+            ` Any model composed or extended from FirebaseModel must define _path prop.`
         );
       }
     };
 
     const _getDatabase = function() {
-      return database.ref("/" + self._path);
+      return database.ref('/' + self._path);
     };
 
     return {
@@ -44,7 +42,6 @@ const FirebaseBaseModel = types
 
         if (self._id) {
           // Old object, just perform update
-          console.log("Old object");
 
           return _getDatabase()
             .child(self._id)
@@ -52,12 +49,12 @@ const FirebaseBaseModel = types
         } else {
           // New object, create a new entry
 
-          console.log("New object");
-
           const response = _getDatabase().push(_getSnapshot());
           const key = response.key;
 
-          if (key !== null) self._id = key;
+          if (key !== null) {
+            self._id = key;
+          }
 
           const retPromise = new Promise((resolve, reject) => {
             response.then(val => resolve(val), val => reject(val));
@@ -69,21 +66,21 @@ const FirebaseBaseModel = types
     };
   });
 
-const _getDatabase = function(Model: typeof FirebaseBaseModel) {
-  const path = Model["properties"]._path.defaultValue;
+const _getDatabase = function(Model: typeof FirebaseModel) {
+  const path = Model['properties']._path.defaultValue;
   return firebase.database().ref(path);
 };
 
-const findById = function(
-  Model: typeof FirebaseBaseModel,
+export const findById = function(
+  Model: typeof FirebaseModel,
   id: string
 ): Promise<any> {
   return new Promise((resolve, reject) => {
     _getDatabase(Model)
       .child(id)
-      .once("value")
+      .once('value')
       .then(
-        function(snapshot) {
+        function(snapshot: any) {
           const val = snapshot.val();
           val._id = id;
           const createdModel = Model.create(val);
@@ -96,8 +93,8 @@ const findById = function(
   });
 };
 
-const findAllWhere = function(
-  Model: typeof FirebaseBaseModel,
+export const findAllWhere = function(
+  Model: typeof FirebaseModel,
   prop: string,
   operator: string,
   value: any
@@ -108,78 +105,38 @@ const findAllWhere = function(
     var ref = db.orderByChild(prop);
 
     switch (operator) {
-      case "=":
+      case '=':
         ref = ref.equalTo(value);
         break;
-      case ">":
-        ref = db.startAt(value);
+      case '>':
+        ref = ref.startAt(value);
         break;
-      case "<":
-        ref = db.endAt(value);
+      case '<':
+        ref = ref.endAt(value);
         break;
-      case "between":
+      case 'between':
         // Assume value is an array having 2 elements
-        ref = db.startAt(value[0]).endAt(value[1]);
+        ref = ref.startAt(value[0]).endAt(value[1]);
         break;
       default:
-        throw new Error("Operator `" + operator + "` isn't supported.");
+        throw new Error('Operator ' + operator + ` isn't supported.`);
     }
-
-    ref.once("value", snap => {
-      console.log(snap);
-      debugger;
+    
+    ref.once('value'
+    ).then(
+        success => {
+          let resultObj: any = {};
+          let resultValue = success.val();
+          
+          for (var key in resultValue) {
+            if (resultValue.hasOwnProperty(key)) {
+              resultObj[key] = Model.create(resultValue[key]);
+            }
+          }
+          resolve(resultObj);
+        },
+        error => {
+          reject('Firebase error ' + error + '');
+        });
     });
-  });
-};
-/*
-const findOneWhere = function(): Promise<any> {
-  return new Promise((resolve, reject) => {});
-};
-
-
-const _getFindQuery = function(
-
-)
-*/
-
-const Post = FirebaseBaseModel.named("Post")
-  .props({
-    _path: "posts",
-    title: types.string,
-    description: types.string
-  })
-  .actions(self => {
-    return {
-      updateTitle(newTitle: string) {
-        self.title = newTitle;
-      }
-    };
-  });
-
-async function findAndUpdatePost(id: string) {
-  const post = await findById(Post, id);
-  post.updateTitle(post.title + "/ Third");
-
-  console.log(getSnapshot(post));
-
-  await post.save();
-}
-
-async function createAndUpdatePost() {
-  const post = Post.create({
-    title: "First",
-    description: "Wow!"
-  });
-
-  await post.save();
-
-  post.updateTitle(post.title + " / Second");
-
-  await post.save();
-
-  await findAndUpdatePost(post._id);
-}
-
-createAndUpdatePost();
-
-findAllWhere(Post, "description", "=", "Wow!");
+  };
