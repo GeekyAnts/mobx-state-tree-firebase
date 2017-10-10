@@ -3,16 +3,16 @@ import { types, getSnapshot, getType } from 'mobx-state-tree';
 
 const database = firebase.database();
 
-export const FirebaseModel = types
+export const FirebaseModel: any = types
   .model('FirebaseModel', {
     _id: types.optional(types.string, ''),
     _path: types.optional(types.string, '')
   })
   .actions(self => {
     const _getSnapshot = function() {
-      let _snapshot: object = getSnapshot(self);
-      let snapshot: object = {};
-      for (var i in _snapshot) {
+      let _snapshot: any = getSnapshot(self);
+      let snapshot: any = {};
+      for (let i in _snapshot) {
         // Exclude the private properties
         if (i.substr(0, 1) === '_') {
           continue;
