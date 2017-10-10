@@ -2,9 +2,12 @@
   "name": "mobx-state-tree-firebase",
   "version": "1.0.0",
   "description": "Firebase Integration for mobx-state-tree",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -24,5 +27,8 @@
     "mobx-state-tree": "^1.0.0",
     "firebase": "^4.5.0"
   },
-  "homepage": "https://github.com/GeekyAnts/mobx-state-tree-firebase#readme"
+  "homepage": "https://github.com/GeekyAnts/mobx-state-tree-firebase#readme",
+  "dependencies": {
+    "typescript": "^2.5.3"
+  }
 }
