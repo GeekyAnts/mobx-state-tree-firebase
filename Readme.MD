@@ -1,44 +1,48 @@
-# Mobx-state-tree firebase model
+# mobx-state-tree-firebase: Firebase integration for your MST models
 
 This package will ease the process of setting up all your CRUD operations in your react-native/react project which uses mobx-state-tree as the state management library.
 
 
 ### Prerequisites
 
-You will need - 
+You will need a `mobx-state-tree` model to use this library.
 
-```
-Node (v6+)
-npm (v3+)
-```
 
 ### Installing
 
 Installing is pretty straightforward, if you have the prerequisites set up. Just copy the below code to your terminal in your project directory. Note that this has a peer dependency of mobx and firebase (duh!).
 
 ```
-npm install mst-firebase --save
+npm install mobx-state-tree-firebase --save
+```
+or
+```
+yarn add mobx-state-tree-firebase
 ```
 
 ## Getting Started
 
 Now that you have installed the package you are all set to start playing with it!
 
-First, import the package to wherever you need to save the mst model.
+First, import the package to wherever you need to save the MST model.
 ```js
-import { FirebaseModel } from 'FirebaseModel';
+import { FirebaseModel } from 'mobx-state-tree-firebase';
 ```
+
 This will only provide the save/update function, to get all the other functions you can import them seperately like 
 
 ```js
-import { findById } from 'FirebaseModel';
-import { findAllWhere } from 'FirebaseModel';
+import { findById } from 'mobx-state-tree-firebase';
+import { findAllWhere } from 'mobx-state-tree-firebase';
 ```
 
-Next you have to "inherit" all the properties of the FirebaseModel to your mobx-state-tree model. An example for this would be - 
+You can extend your existing MST models with the FirebaseModel like this
 
 ```js
-const Post = FirebaseBaseModel.named("Post")
+
+import { FirebaseModel } from 'mobx-state-tree-firebase';
+
+const Post = FirebaseModel.named("Post")
   .props({
     _path: "posts",
     title: types.string,
@@ -59,27 +63,24 @@ Now that Let's go over some common use cases.
 1) To create a new entry -
 
 ```js
-const FirstPost = Post.create({
+const firstPost = Post.create({
   title: 'Hey!',
   description: 'Please save this.',
 });
 
-FirstPost.save();
+firstPost.save();
 ```
-And voila! A new post is added! <br> 
+And voila! A new post is added!
 
 2) To update a model - 
 
 ```js
-const FirstPost = Post.create({
-  title: 'Hey!',
-  description: 'updated?',
-  _id: "-Kw4VJxqhKSiA3r2K8ue" 
-});
+const firstPost = await findById(Post, "-Kw4VJxqhKSiA3r2K8ue");
 
-FirstPost.save();
+firstPost.save();
+
 ```
-<br>
+
 To update an existing post you will have to pass the id in the Model as a private property. Based on this it will create/update a new entry in the firebase model. 
 
 3) To find an entry in your firebase database by it's Id - 
