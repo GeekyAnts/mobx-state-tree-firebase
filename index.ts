@@ -3,7 +3,7 @@ import { types, getSnapshot, getType } from 'mobx-state-tree';
 
 const database = firebase.database();
 
-export const FirebaseModel: any = types
+export const FirebaseModel = types
   .model('FirebaseModel', {
     _id: types.optional(types.string, ''),
     _path: types.optional(types.string, '')
