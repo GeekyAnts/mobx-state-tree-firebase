@@ -1,8 +1,9 @@
 {
 	"compilerOptions": {
 		/* Basic Options */
+		"lib": ["es2015"],
 		"target":
-			"es5" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'. */,
+			"es2015" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'. */,
 		"module":
 			"commonjs" /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */ /* Specify module code generation: 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */,
 		"declaration": true /* Concatenate and emit output to single file. */ /* Generates corresponding '.d.ts' file. */,

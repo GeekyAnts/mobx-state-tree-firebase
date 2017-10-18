@@ -19,8 +19,8 @@
 		"url": "https://github.com/GeekyAnts/mobx-state-tree-firebase/issues"
 	},
 	"peerDependencies": {
-		"mobx-state-tree": "^1.0.0",
-		"firebase": "^4.5.0"
+		"firebase": "^4.5.0",
+		"mobx-state-tree": "^1.0.0"
 	},
 	"homepage": "https://github.com/GeekyAnts/mobx-state-tree-firebase#readme",
 	"dependencies": {
