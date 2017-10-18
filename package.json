@@ -1,34 +1,32 @@
 {
-  "name": "mobx-state-tree-firebase",
-  "version": "1.0.2",
-  "description": "Firebase Integration for mobx-state-tree",
-  "main": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "prepublish": "npm run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GeekyAnts/mobx-state-tree-firebase.git"
-  },
-  "keywords": [
-    "Firebase",
-    "mobx-state-tree",
-    "mobx"
-  ],
-  "author": "sanketsahu@gmail.com",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/GeekyAnts/mobx-state-tree-firebase/issues"
-  },
-  "peerDependencies": {
-    "mobx-state-tree": "^1.0.0",
-    "firebase": "^4.5.0"
-  },
-  "homepage": "https://github.com/GeekyAnts/mobx-state-tree-firebase#readme",
-  "dependencies": {
-    "typescript": "^2.5.3"
-  }
+	"name": "mobx-state-tree-firebase",
+	"version": "1.0.2",
+	"description": "Firebase Integration for mobx-state-tree",
+	"main": "./dist/index.js",
+	"typings": "./dist/index.d.ts",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsc"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/GeekyAnts/mobx-state-tree-firebase.git"
+	},
+	"keywords": ["Firebase", "mobx-state-tree", "mobx"],
+	"author": "sanketsahu@gmail.com",
+	"license": "Apache-2.0",
+	"bugs": {
+		"url": "https://github.com/GeekyAnts/mobx-state-tree-firebase/issues"
+	},
+	"peerDependencies": {
+		"mobx-state-tree": "^1.0.0",
+		"firebase": "^4.5.0"
+	},
+	"homepage": "https://github.com/GeekyAnts/mobx-state-tree-firebase#readme",
+	"dependencies": {
+		"firebase": "^4.5.0",
+		"mobx": "^3.3.1",
+		"mobx-state-tree": "^1.0.0",
+		"typescript": "^2.5.3"
+	}
 }
