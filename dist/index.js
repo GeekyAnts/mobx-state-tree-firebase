@@ -1,18 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const firebase = require("firebase");
-const mobx_state_tree_1 = require("mobx-state-tree");
-const database = firebase.database();
+var firebase = require("firebase");
+var mobx_state_tree_1 = require("mobx-state-tree");
+var database = firebase.database();
 exports.FirebaseModel = mobx_state_tree_1.types
     .model("FirebaseModel", {
     _id: mobx_state_tree_1.types.optional(mobx_state_tree_1.types.string, ""),
     _path: mobx_state_tree_1.types.optional(mobx_state_tree_1.types.string, ""),
 })
-    .actions(self => {
-    const _getSnapshot = function () {
-        let _snapshot = mobx_state_tree_1.getSnapshot(self);
-        let snapshot = {};
-        for (let i in _snapshot) {
+    .actions(function (self) {
+    var _getSnapshot = function () {
+        var _snapshot = mobx_state_tree_1.getSnapshot(self);
+        var snapshot = {};
+        for (var i in _snapshot) {
             // Exclude the private properties
             if (i.substr(0, 1) === "_") {
                 continue;
@@ -21,18 +21,18 @@ exports.FirebaseModel = mobx_state_tree_1.types
         }
         return snapshot;
     };
-    const _checkPath = function () {
+    var _checkPath = function () {
         if (!self._path) {
             throw new Error(mobx_state_tree_1.getType(self).name +
-                ` doesn't have _path prop defined.` +
-                ` Any model composed or extended from FirebaseModel must define _path prop.`);
+                " doesn't have _path prop defined." +
+                " Any model composed or extended from FirebaseModel must define _path prop.");
         }
     };
-    const _getDatabase = function () {
+    var _getDatabase = function () {
         return database.ref("/" + self._path);
     };
     return {
-        save() {
+        save: function () {
             _checkPath();
             if (self._id) {
                 // Old object, just perform update
@@ -42,41 +42,41 @@ exports.FirebaseModel = mobx_state_tree_1.types
             }
             else {
                 // New object, create a new entry
-                const response = _getDatabase().push(_getSnapshot());
-                const key = response.key;
+                var response_1 = _getDatabase().push(_getSnapshot());
+                var key = response_1.key;
                 if (key !== null) {
                     self._id = key;
                 }
-                const retPromise = new Promise((resolve, reject) => {
-                    response.then(val => resolve(val), val => reject(val));
+                var retPromise = new Promise(function (resolve, reject) {
+                    response_1.then(function (val) { return resolve(val); }, function (val) { return reject(val); });
                 });
                 return retPromise;
             }
         },
     };
 });
-const _getDatabase = function (Model) {
-    const path = Model["properties"]._path.defaultValue;
+var _getDatabase = function (Model) {
+    var path = Model["properties"]._path.defaultValue;
     return firebase.database().ref(path);
 };
 exports.findById = function (Model, id) {
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
         _getDatabase(Model)
             .child(id)
             .once("value")
             .then(function (snapshot) {
-            const val = snapshot.val();
+            var val = snapshot.val();
             val._id = id;
-            const createdModel = Model.create(val);
+            var createdModel = Model.create(val);
             resolve(createdModel);
-        }, err => {
+        }, function (err) {
             reject(err);
         });
     });
 };
 exports.findAllWhere = function (Model, prop, operator, value) {
-    return new Promise((resolve, reject) => {
-        const db = _getDatabase(Model);
+    return new Promise(function (resolve, reject) {
+        var db = _getDatabase(Model);
         var ref = db.orderByChild(prop);
         switch (operator) {
             case "=":
@@ -93,18 +93,18 @@ exports.findAllWhere = function (Model, prop, operator, value) {
                 ref = ref.startAt(value[0]).endAt(value[1]);
                 break;
             default:
-                throw new Error("Operator " + operator + ` isn't supported.`);
+                throw new Error("Operator " + operator + " isn't supported.");
         }
-        ref.once("value").then(success => {
-            let resultObj = {};
-            let resultValue = success.val();
+        ref.once("value").then(function (success) {
+            var resultObj = {};
+            var resultValue = success.val();
             for (var key in resultValue) {
                 if (resultValue.hasOwnProperty(key)) {
                     resultObj[key] = Model.create(resultValue[key]);
                 }
             }
             resolve(resultObj);
-        }, error => {
+        }, function (error) {
             reject("Firebase error " + error + "");
         });
     });
