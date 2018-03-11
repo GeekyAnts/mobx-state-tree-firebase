@@ -1,6 +1,6 @@
-[NOT MAINTAINED]
+# [NOT BEING MAINTAINED]
 
-# mobx-state-tree-firebase: Firebase integration for your MST models
+## mobx-state-tree-firebase: Firebase integration for your MST models
 
 This package will ease the process of setting up all your CRUD operations in your react-native/react project which uses mobx-state-tree as the state management library.
 
